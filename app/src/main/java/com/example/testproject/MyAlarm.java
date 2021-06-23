@@ -19,10 +19,10 @@ public class MyAlarm extends BroadcastReceiver {
         //you can check the log that it is fired
         //Here we are actually not doing anything
         //but you can do any task here that you want to be done at a specific time everyday
-        mp=MediaPlayer.create(context, R.raw.alarm);
+        mp=MediaPlayer.create(context, R.raw.alarm1);
         mp.start();
         Toast.makeText(context, "Alarm....", Toast.LENGTH_LONG).show();
-        Log.d("MyAlarmBell", "Alarm just fired");
+        Log.d("MyAlarmBell", "Alarm just fire.....");
     }
 
 }
