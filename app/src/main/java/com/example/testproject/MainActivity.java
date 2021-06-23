@@ -1,4 +1,3 @@
-//Its your boi Amit Kumar A.K.A Amit, fker just do it yourself noob.
 package com.example.testproject;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -28,12 +27,13 @@ import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 
-public class MainActivity extends AppCompatActivity implements  AdapterView.OnItemSelectedListener,
-        DatePickerDialog.OnDateSetListener{
+public class MainActivity extends AppCompatActivity implements  AdapterView.OnItemSelectedListener, DatePickerDialog.OnDateSetListener{
 
     EditText mdName;
     TextView d;
@@ -64,19 +64,53 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         date = findViewById(R.id.date);
         d = findViewById(R.id.tvdate);
         spinner = findViewById(R.id.spinner);
+
+        List<String> categories = new ArrayList<>();
+        categories.add(0,"Select");
+        categories.add("Morning");
+        categories.add("Afternoon");
+        categories.add("Evening");
+        categories.add("Night");
+
         insert = findViewById(R.id.insert);
         db = new DBHelper(this);
 
         //spinner
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.day_time, android.R.layout.simple_spinner_item);
+        //style and populate spinner
+        ArrayAdapter<String> adapter;
+            adapter   = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,categories);
+       //dropdown layout style
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //attaching data adapter to spinner
         spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(parent.getItemAtPosition(position).equals("Select"))
+                {
+                    // do northing
+                }
+                else
+                {
+                    //on selecting a spinner
+                    String item = parent.getItemAtPosition(position).toString();
+
+                    //show selected spinner item
+                    Toast.makeText(parent.getContext(),"Selected: "+item, Toast.LENGTH_SHORT).show();
+
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //auto generated method stub
+            }
+        });
 
 
 
-        //date and stuff
+        //date
         mCalendar = Calendar.getInstance();
         mHour = mCalendar.get(Calendar.HOUR_OF_DAY);
         mMinute = mCalendar.get(Calendar.MINUTE);
@@ -98,22 +132,22 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
                 //Spinner
                 String t = spinner.getSelectedItem().toString();
                 if(t.equals("Morning")){
-                    time = 0;
+                    time = 1;
                     mHour = 5;
                     mMinute = 25;
                     txtTime = mHour + ":" + mMinute;
                 }else if(t.equals("Afternoon")){
-                    time = 1;
+                    time = 2;
                     mHour = 15;
                     mMinute = 00;
                     txtTime = mHour + ":" + mMinute;
                 }else if(t.equals("Evening")){
-                    time = 2;
+                    time = 3;
                     mHour = 18;
                     mMinute = 00;
                     txtTime = mHour + ":" + mMinute;
                 }else{
-                    time = 3;
+                    time = 4;
                     mHour = 21;
                     mMinute = 00;
                     txtTime = mHour + ":" + mMinute;
@@ -153,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
                 if(checkInsert == true){
                     Toast.makeText(MainActivity.this,"New Data inserted", Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(MainActivity.this,"Some error occured", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,"ERROR......", Toast.LENGTH_SHORT).show();
                 }
             }
         });
