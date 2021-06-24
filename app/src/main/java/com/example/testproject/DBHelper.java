@@ -23,6 +23,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(Context context)
     {
+
+        //it create the database with version 1
         super(context, TABLE_NAME,null,1);
     }
 
@@ -30,6 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
     //create table in Database
     @Override
     public void onCreate(SQLiteDatabase db) {
+        //SQL queries
         String createTable = "CREATE TABLE " + TABLE_NAME + " (" +COL1 + " TEXT, " + COL2 + " TEXT, " + COL3 + " TEXT)";
         db.execSQL(createTable);
     }
@@ -38,26 +41,29 @@ public class DBHelper extends SQLiteOpenHelper {
     //drop table in Database
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+        //SQL queries
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME);
         onCreate(db);
     }
 
 
     //tuples (records of medicine ,rows)
+    //methods to insert the data...
     public Boolean insertData(String MDName, String date, String time){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL1, MDName);
-        contentValues.put(COL2, date);
-        contentValues.put(COL3, time);
+        SQLiteDatabase db = this.getWritableDatabase();//sql database
+        ContentValues contentValues = new ContentValues();//object content values inside our table
+        contentValues.put(COL1, MDName);//medicine name
+        contentValues.put(COL2, date);//date
+        contentValues.put(COL3, time);//time of day
 
-        Log.d("dbhelper","inserting data" + MDName + " to " + TABLE_NAME);
 
         long result = db.insert(TABLE_NAME,null,contentValues);
 
         if(result == -1){
-            return false;
-        }else{
+            return false;//insertion has failed
+        }
+        else
+            {
             return true;
         }
     }

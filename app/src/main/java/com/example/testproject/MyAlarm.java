@@ -22,7 +22,7 @@ public class MyAlarm extends BroadcastReceiver {
         mp=MediaPlayer.create(context, R.raw.alarm1);
         mp.start();
         Toast.makeText(context, "Alarm....", Toast.LENGTH_LONG).show();
-        Log.d("MyAlarmBell", "Alarm just fire.....");
+        //Log.d("MyAlarmBell", "Alarm just fire.....");
     }
 
 }

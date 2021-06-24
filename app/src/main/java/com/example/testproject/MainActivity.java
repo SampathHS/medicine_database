@@ -36,14 +36,12 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements  AdapterView.OnItemSelectedListener, DatePickerDialog.OnDateSetListener{
     //to enter the medicine name
     EditText mdName;
-    //date
+    // to enter date
     TextView d;
 
     //date image (date picker)
     ImageView date;
 
-
-//    int year,month,day;
 
     //spinner to display Time of day
     Spinner spinner;
@@ -53,14 +51,15 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
 
     //SQLite database to insert the medicine
     DBHelper db;
-    int time;
-    String txtTime;
 
 
-    //    Calendar calendar;
+    String txtTime;//time of day
+
+
+    //    Calendar
     private Calendar mCalendar;
 
-    //    DatePickerDialog dpd;
+    //    DatePickerDialog
     private int mYear, mMonth, mHour, mMinute, mDay;
 
     //    String txtDate;
@@ -79,9 +78,9 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         setContentView(R.layout.activity_main);
 
 
-        mdName = findViewById(R.id.mdName);
-        date = findViewById(R.id.date);
-        d = findViewById(R.id.tvdate);
+        mdName = findViewById(R.id.mdName);//medicine name
+        date = findViewById(R.id.date);//date
+        d = findViewById(R.id.tvdate);//time of day
 
         //spinner for dropdown list to select time of day
         spinner = findViewById(R.id.spinner);
@@ -91,13 +90,15 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         //hint (select) for spinner
         categories.add(0,"Select");
         //dropdown
-        categories.add("Morning");
-        categories.add("Afternoon");
-        categories.add("Evening");
-        categories.add("Night");
+        categories.add("Morning");//@8:00
+        categories.add("Afternoon");//1:00
+        categories.add("Evening");//6:30
+        categories.add("Night");//10:30
 
         //insert button
         insert = findViewById(R.id.insert);
+
+
         //SQLite database
         db = new DBHelper(this);
 
@@ -112,9 +113,9 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(parent.getItemAtPosition(position).equals("Select"))
+                if(parent.getItemAtPosition(position).equals("Select"))//select (hint text)
                 {
-                    // do northing
+                    // do nothing
                 }
                 else
                 {
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
                     String item = parent.getItemAtPosition(position).toString();
 
                     //show selected spinner item
-                    Toast.makeText(parent.getContext(),"Selected: "+item, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(parent.getContext(),"Time of day: "+item, Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                //auto generated method stub
+                //auto generated method...
             }
         }
         );
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
 
 
 
-        //inserting
+        //inserting data......
         insert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,14 +161,14 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
                 String t = spinner.getSelectedItem().toString();
                 if(t.equals("Morning")){
                     timeOfDay = "Morning";
-                    mHour = 5;
-                    mMinute = 25;
+                    mHour = 8;
+                    mMinute = 00;
                     txtTime = mHour + ":" + mMinute;
 
                 }
                 else if(t.equals("Afternoon")){
                     timeOfDay = "Afternoon";
-                    mHour = 15;
+                    mHour = 13;
                     mMinute = 00;
                     txtTime = mHour + ":" + mMinute;
 
@@ -175,23 +176,22 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
                 else if(t.equals("Evening")){
                     timeOfDay = "Evening";
                     mHour = 18;
-                    mMinute = 00;
+                    mMinute = 30;
                     txtTime = mHour + ":" + mMinute;
 
                 }
                 else{
                     timeOfDay = "Night";
-                    mHour = 23;
-                    mMinute = 16;
+                    mHour = 01;
+                    mMinute = 15;
                     txtTime = mHour + ":" + mMinute;
 
                 }
 
-
-
                 finalized_date_time = mDate + " " + txtTime;
 
                 //alarm and stuff
+                //calender
                 Calendar cal = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
 //                try {
@@ -206,22 +206,22 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
                 cal.set(Calendar.YEAR,mYear);
                 cal.set(Calendar.DATE,mDay);
 
-                //call the the setAlarm function
+                // setAlarm function
                 setAlarm(cal);
 
 
-                // database related
-                String MBName = mdName.getText().toString();
-                String Date = mDate;
-                String Time = timeOfDay;
+                // database related(store the values)
+                String MBName = mdName.getText().toString();//medicine name
+                String Date = mDate;//date
+                String Time = timeOfDay;//time of day
 
 
                 //checking weather give data is inserted on not
                 Boolean checkInsert = db.insertData(MBName,Date,Time);
                 if(checkInsert == true){
-                    Toast.makeText(MainActivity.this,"Data inserted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,"Data inserted successfully", Toast.LENGTH_SHORT).show();//on success message
                 }else{
-                    Toast.makeText(MainActivity.this,"ERROR......", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,"Data Failed", Toast.LENGTH_SHORT).show();//failure message
                 }
             }
         });
@@ -262,11 +262,11 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         Calendar now = Calendar.getInstance();
         DatePickerDialog dpd = DatePickerDialog.newInstance(
                 this,
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
+                now.get(Calendar.YEAR),//year
+                now.get(Calendar.MONTH),//month
+                now.get(Calendar.DAY_OF_MONTH)//day
         );
-        dpd.show(getSupportFragmentManager(), "Datepickerdialog");
+        dpd.show(getSupportFragmentManager(), "Datepickerdialog");//Datepickerdialog show
     }
 
 
@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         mMonth = monthOfYear;
         mYear = year;
         mDate = dayOfMonth + "/" + monthOfYear + "/" + year;
-        d.setText(mDate);
+        d.setText(mDate);//print the date
     }
 
 
